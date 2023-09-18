@@ -1,4 +1,4 @@
-from algorithms import *
+from owl.utils.algorithms import *
 from imutils import grab_contours
 import numpy as np
 import cv2
@@ -39,6 +39,8 @@ class GreenOnBrown:
         :param algorithm: the algorithm to use. Defaults to ExG if not correct
         :return: returns the contours, bounding boxes, centroids and the image on which the boxes have been drawn
         '''
+        self.weedCenters = []
+        self.boxes = []
 
         # different algorithm options, add in your algorithm here if you make a new one!
         threshedAlready = False
@@ -71,12 +73,10 @@ class GreenOnBrown:
 
         else:
             output = exg(image)
-            print('[WARNING] DEFAULTED TO EXG')
+            print(f'[WARNING] Selected algorithm {self.algorithm} unavailable. Defaulting to ExG')
 
         # run the thresholds provided
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
-        self.weedCenters = []
-        self.boxes = []
 
         # if not a binary image, run an adaptive threshold on the area that fits within the thresholded bounds.
         if not threshedAlready:
