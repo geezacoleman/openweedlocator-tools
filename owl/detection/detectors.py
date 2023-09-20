@@ -13,19 +13,19 @@ class GreenOnBrown:
         self.label = labels
 
     def find(self,
-                  image,
-                  exgMin=30,
-                  exgMax=250,
-                  hueMin=30,
-                  hueMax=90,
-                  brightnessMin=5,
-                  brightnessMax=200,
-                  saturationMin=30,
-                  saturationMax=255,
-                  minArea=1,
-                  show_display=False,
-                  algorithm='exg',
-                  invert_hue=False):
+             image,
+             exgMin=30,
+             exgMax=250,
+             hueMin=30,
+             hueMax=90,
+             brightnessMin=5,
+             brightnessMax=200,
+             saturationMin=30,
+             saturationMax=255,
+             minArea=1,
+             show_display=False,
+             algorithm='exg',
+             invert_hue=False):
         '''
         Uses a provided algorithm and contour detection to determine green objects in the image. Min and Max
         thresholds are provided.

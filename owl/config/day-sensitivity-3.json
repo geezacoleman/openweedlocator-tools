@@ -1,22 +1,23 @@
 {
   "//comment_gog": "enter parameters related to green-on-green detection",
-  "confidence": 0.6,
+  "conf": 0.6,
   "iou": 0.7,
-  "filter_id": 63,
+  "filter_id": "null",
 
   "//comment_gob": "parameters related to green-on-brown detection",
-  "exgMin": 30,
-  "exgMax": 250,
-  "hueMin": 32,
-  "hueMax": 80,
-  "saturationMin": 10,
-  "saturationMax": 250,
-  "brightnessMin": 10,
-  "brightnessMax": 250,
-  "minArea": 100,
+  "exgMin": 25,
+  "exgMax": 200,
+  "hueMin": 39,
+  "hueMax": 83,
+  "saturationMin": 50,
+  "saturationMax": 220,
+  "brightnessMin": 60,
+  "brightnessMax": 190,
+  "minArea": 10,
   "invert_hue": false,
 
   "//comment_general": "parameters related to general OWL operation",
   "show_display": true,
-  "algorithm": "exhsv"
+  "algorithm": "exhsv",
+  "resolution": [416, 320]
 }
