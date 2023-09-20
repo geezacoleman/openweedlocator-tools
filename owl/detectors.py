@@ -212,30 +212,6 @@ class GreenOnGreen:
 
         return True
 
-def test_webcam():
-    detector = GreenOnGreen()
-
-    cap = cv2.VideoCapture(0)
-
-    if not cap.isOpened():
-        print("[Error] Could not open camera.")
-        exit()
-
-    while True:
-        ret, frame = cap.read()
-
-        _, boxes, weedCenters, image = detector.predict(frame.copy(), resolution=None)
-        cv2.imshow('Video Feed', image)
-
-        # Exit with 'ESC' key
-        if cv2.waitKey(1) == 27:
-            break
-
-    cap.release()
-    cv2.destroyAllWindows()
-
-if __name__ == "__main__":
-    test_webcam()
 
 
 
