@@ -1,4 +1,4 @@
-from .utils.algorithms import *
+from owl.utils.algorithms import  *
 from imutils import grab_contours
 
 from pathlib import Path
@@ -12,7 +12,7 @@ class GreenOnBrown:
         self.algorithm = algorithm
         self.label = labels
 
-    def inference(self,
+    def find(self,
                   image,
                   exgMin=30,
                   exgMax=250,
@@ -129,7 +129,7 @@ class GreenOnBrown:
 
 class GreenOnGreen:
     def __init__(self, model_path='owl/models/yolov8n.pt', platform='windows'):
-        self.model_path = model_path
+        self.model_path = Path(model_path)
         self.results = None
         self.weedCenters = []
         self.boxes = []
@@ -144,14 +144,16 @@ class GreenOnGreen:
             sys.exit()
 
         if not self._validate_model_path(self.model_path):
-            raise ValueError("[ERROR] Invalid model path provided.")
+            raise ValueError(f"[ERROR] Invalid model path provided {str(self.model_path)}.")
 
-        print(f'[INFO] Loading model...')
+        print(f'[INFO] Loading model {str(self.model_path.stem)}...')
         self.model = YOLO(self.model_path)
 
-    def predict(self, image, conf=0.4, iou=0.7, resolution=(640, 420)):
+    def find(self, image, conf=0.4, iou=0.7, resolution=(640, 420), filter_id=None):
         image, resolution = self._validate_resolution(image, resolution=resolution)
-        self.results = self.model(image, conf=conf, iou=iou, imgsz=(resolution[1], resolution[0]), save=False, stream=True,)
+        self.results = self.model(image, conf=conf, iou=iou,
+                                  imgsz=(resolution[1], resolution[0]),
+                                  save=False, stream=True, classes=filter_id, verbose=False)
 
         for result in self.results:
             boxes = result.boxes.to(self.device).numpy()
@@ -198,9 +200,7 @@ class GreenOnGreen:
         return image, (modelW, modelH)
 
     @staticmethod
-    def _validate_model_path(path: str) -> bool:
-        model_path = Path(path)
-
+    def _validate_model_path(model_path) -> bool:
         if not model_path.exists():
             print(f"[ERROR] {model_path} could not be found.")
             return False

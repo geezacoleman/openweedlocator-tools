@@ -2,7 +2,7 @@
   "//comment_gog": "enter parameters related to green-on-green detection",
   "conf": 0.6,
   "iou": 0.7,
-  "filter_id": 63,
+  "filter_id": "null",
 
   "//comment_gob": "parameters related to green-on-brown detection",
   "exgMin": 25,

@@ -1,10 +1,11 @@
 import json
-
-from ..detectors import GreenOnGreen, GreenOnBrown
+from owl.detection import GreenOnGreen, GreenOnBrown
 
 def get_weed_detector(algorithm, model_path=None, platform='windows'):
     if algorithm == 'gog':
+        print('here')
         return GreenOnGreen(model_path=model_path, platform=platform)
+
     else:
         return GreenOnBrown(algorithm=algorithm)
 
@@ -13,11 +14,9 @@ def load_config(config_file):
         config = json.load(f)
     return config
 
-def setup_and_run_detector(weed_detector, frame, config_file="owl/config/day-sensitivity-1.json"):
-    config = load_config(config_file=config_file)
-
+def setup_and_run_detector(weed_detector, frame, config):
     # load general parameters
-    show_display = config.get('show_display')  # Assuming this is also coming from the config
+    show_display = config.get('show_display')
     algorithm = config.get('algorithm')
     resolution = tuple(config.get('resolution'))
 
@@ -34,19 +33,21 @@ def setup_and_run_detector(weed_detector, frame, config_file="owl/config/day-sen
     invert_hue = config.get('invert_hue')
 
     # load GreenonGreen parameters
-    conf = config.get('confidence')
+    conf = config.get('conf')
     iou = config.get('iou')
-    filter_id = config.get('filter_id')
+    filter_id = None if config.get('filter_id') == "null" or config.get('filter_id') == "" else config.get('filter_id')
 
     if algorithm == 'gog':
-        return weed_detector.inference(
+        return weed_detector.find(
             frame.copy(),
             conf=conf,
             iou=iou,
-            resolution=resolution)
+            resolution=resolution,
+            filter_id=filter_id
+        )
 
     else:
-        return weed_detector.inference(
+        return weed_detector.find(
             frame.copy(),
             exgMin=exgMin,
             exgMax=exgMax,
