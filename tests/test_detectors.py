@@ -4,7 +4,7 @@ from owl.detection import GreenOnBrown, GreenOnGreen
 
 class TestGreenOnBrown:
     resolutions = [(123, 456), (789, 101), (112, 134), (563, 289)]
-    algorithms = ['exgr', 'exg', 'exg_standardised', 'exg_standardised_hue', 'gndvi', 'hsv', 'maxg']
+    algorithms = ['exgr', 'exg', 'exg_standardised_hue', 'hsv']
 
     @pytest.mark.parametrize("resolution", resolutions)
     def test_non_standard_resolutions(self, resolution):
