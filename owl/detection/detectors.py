@@ -6,10 +6,12 @@ import numpy as np
 import sys
 import cv2
 
+import warnings
+
 
 class GreenOnBrown:
-    def __init__(self, algorithm='exg', labels='weed'):
-        self.algorithm = algorithm
+    def __init__(self, labels='weed'):
+        self.algorithm = None
         self.label = labels
 
     def find(self,
@@ -45,39 +47,40 @@ class GreenOnBrown:
         '''
         self.weedCenters = []
         self.boxes = []
+        self.algorithm = algorithm
 
         # different algorithm options, add in your algorithm here if you make a new one!
         threshedAlready = False
-        if algorithm == 'exg':
+        if self.algorithm == 'exg':
             output = exg(image)
 
-        elif algorithm == 'exgr':
+        elif self.algorithm == 'exgr':
             output = exgr(image)
 
-        elif algorithm == 'maxg':
+        elif self.algorithm == 'maxg':
             output = maxg(image)
 
-        elif algorithm == 'nexg':
+        elif self.algorithm == 'nexg':
             output = exg_standardised(image)
 
-        elif algorithm == 'exhsv':
+        elif self.algorithm == 'exhsv':
             output = exg_standardised_hue(image, hueMin=hueMin, hueMax=hueMax,
                                           brightnessMin=brightnessMin, brightnessMax=brightnessMax,
                                           saturationMin=saturationMin, saturationMax=saturationMax,
                                           invert_hue=invert_hue)
 
-        elif algorithm == 'hsv':
+        elif self.algorithm == 'hsv':
             output, threshedAlready = hsv(image, hueMin=hueMin, hueMax=hueMax,
                                           brightnessMin=brightnessMin, brightnessMax=brightnessMax,
                                           saturationMin=saturationMin, saturationMax=saturationMax,
                                           invert_hue=invert_hue)
 
-        elif algorithm == 'gndvi':
+        elif self.algorithm == 'gndvi':
             output = gndvi(image)
 
         else:
             output = exg(image)
-            print(f'[WARNING] Selected algorithm {self.algorithm} unavailable. Defaulting to ExG')
+            warnings.warn(f'Selected algorithm {self.algorithm} unavailable. Defaulting to ExG')
 
         # run the thresholds provided
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
@@ -128,23 +131,22 @@ class GreenOnBrown:
 
 
 class GreenOnGreen:
-    def __init__(self, model_path='owl/models/yolov8n.pt', platform='windows'):
+    def __init__(self, model_path='owl/models/yolov8n.pt', platform='desktop'):
         self.model_path = Path(model_path)
         self.results = None
         self.weedCenters = []
         self.boxes = []
 
-        if platform == 'windows':
+        if platform == 'desktop':
             from ultralytics import YOLO
             import torch
             self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
         else:
-            print(f'[INFO] GreenonGreen not yet implemented on {platform} platform')
-            sys.exit()
+            raise NotImplementedError(f'GreenOnGreen not yet implemented on {platform} platform')
 
         if not self._validate_model_path(self.model_path):
-            raise ValueError(f"[ERROR] Invalid model path provided {str(self.model_path)}.")
+            raise ValueError("Invalid model path provided.")
 
         print(f'[INFO] Loading model {str(self.model_path.stem)}...')
         self.model = YOLO(self.model_path)
@@ -202,12 +204,12 @@ class GreenOnGreen:
     @staticmethod
     def _validate_model_path(model_path) -> bool:
         if not model_path.exists():
-            print(f"[ERROR] {model_path} could not be found.")
+            warnings.warn(f"[ERROR] {model_path} could not be found.")
             return False
 
         # ensure path is .pt model
         if model_path.suffix != '.pt':
-            print(f"[ERROR] {model_path} is not a .pt file.")
+            warnings.warn(f"[ERROR] {model_path} is not a .pt file.")
             return False
 
         return True

@@ -7,7 +7,7 @@ def get_weed_detector(algorithm, model_path=None, platform='windows'):
         return GreenOnGreen(model_path=model_path, platform=platform)
 
     else:
-        return GreenOnBrown(algorithm=algorithm)
+        return GreenOnBrown()
 
 def load_config(config_file):
     with open(config_file, 'r') as f:

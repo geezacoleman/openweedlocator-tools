@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 
 def read_requirements(filename):
-    with open(filename, 'r') as req_file:
+    with open(filename, 'r+') as req_file:
         return req_file.read().splitlines()
 
 

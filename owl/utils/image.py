@@ -27,17 +27,26 @@ class FrameReader:
             self.single_image = False
 
         elif os.path.isfile(path):
-            if path.endswith(('.png', '.jpg', '.jpeg')):
+            supported_image_formats = ['.png', '.jpg', '.jpeg']
+            supported_video_formats = ['.mp4', '.avi']
+            _, ext = os.path.splitext(path)
+
+            if ext.lower() in supported_image_formats:
                 self.cam = cv2.resize(cv2.imread(path), self.resolution, interpolation=cv2.INTER_AREA)
                 self.input_type = "image"
                 self.single_image = True
 
-            else:
+            elif ext.lower() in supported_video_formats:
                 self.cam = FileVideoStream(path).start()
                 self.input_type = "video"
                 self.single_image = False
+
+            else:
+                raise ValueError(
+                    f'[ERROR] Unsupported file type: {ext}. Supported formats are {supported_image_formats + supported_video_formats}')
+
         else:
-            raise ValueError(f'[ERROR] Invalid path to image/s: {path}')
+            raise FileNotFoundError(f'[ERROR] The provided path does not exist: {path}')
 
     def read(self):
         if self.single_image:
