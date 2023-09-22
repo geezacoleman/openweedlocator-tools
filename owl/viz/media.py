@@ -3,16 +3,18 @@ from owl.utils.io import get_weed_detector, load_config, setup_and_run_detector
 
 import cv2
 
-def webcam(algorithm="exhsv",
-           model_path="owl/models/yolov8n.pt",
-           config_file="owl/config/day-sensitivity-1.json", **kwargs):
+def webcam(
+        src=0,
+        algorithm="exhsv",
+        model_path="owl/models/yolov8n.pt",
+        config_file="owl/config/day-sensitivity-1.json", **kwargs):
     weed_detector = get_weed_detector(algorithm=algorithm, model_path=model_path)
 
     config = load_config(config_file)
     config.update(kwargs)
     config.update({"algorithm": f"{algorithm}"})
 
-    reader = cv2.VideoCapture(0)
+    reader = cv2.VideoCapture(src)
 
     if not reader.isOpened():
         print("[ERROR] Could not open camera.")

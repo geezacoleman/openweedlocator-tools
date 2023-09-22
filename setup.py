@@ -1,25 +1,27 @@
-from setuptools import setup, find_packages
-
 import os
 import re
+from setuptools import setup, find_packages
 
-def read_requirements():
-    with open('requirements.txt', 'r') as req:
-        content = req.read()
-        requirements = content.split('\n')
 
-    return requirements
+def read_requirements(filename):
+    with open(filename, 'r') as req_file:
+        return req_file.read().splitlines()
 
-# ==================== VERSIONING ====================
 
-with open(os.path.join(os.path.dirname(__file__), 'owl', '__init__.py'), 'r') as f:
-    version = re.search(r'^__version__ = [\'"]([^\'"]*)[\'"]', f.read(), re.M).group(1)
+def get_version():
+    with open(os.path.join(os.path.dirname(__file__), 'owl', '__init__.py'), 'r') as f:
+        return re.search(r'^__version__ = [\'"]([^\'"]*)[\'"]', f.read(), re.M).group(1)
+
 
 setup(
     name='openweedlocator-toolkit',
-    version=version,
+    version=get_version(),
     packages=find_packages(),
-    install_requires=read_requirements(),
+    install_requires=read_requirements('requirements.txt'),
+    extras_require={
+        'desktop': read_requirements('requirements_desktop.txt'),
+        'rpi': read_requirements('requirements_rpi.txt')
+    },
     author='Guy Coleman',
     author_email='hoot@openweedlocator.com',
     maintainer_email="guy.coleman@sydney.edu.au",
