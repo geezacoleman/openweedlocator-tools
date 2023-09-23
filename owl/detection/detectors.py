@@ -137,7 +137,7 @@ class GreenOnGreen:
         self.weedCenters = []
         self.boxes = []
 
-        if platform == 'desktop':
+        if platform == 'desktop' or platform == 'windows':
             from ultralytics import YOLO
             import torch
             self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')

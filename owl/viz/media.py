@@ -7,8 +7,9 @@ def webcam(
         src=0,
         algorithm="exhsv",
         model_path="owl/models/yolov8n.pt",
-        config_file="owl/config/day-sensitivity-1.json", **kwargs):
-    weed_detector = get_weed_detector(algorithm=algorithm, model_path=model_path)
+        config_file="owl/config/day-sensitivity-1.json",
+        platform="desktop", **kwargs):
+    weed_detector = get_weed_detector(algorithm=algorithm, model_path=model_path, platform=platform)
 
     config = load_config(config_file)
     config.update(kwargs)

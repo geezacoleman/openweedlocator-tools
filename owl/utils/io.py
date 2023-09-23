@@ -1,9 +1,8 @@
 import json
 
-def get_weed_detector(algorithm, model_path=None, platform='windows'):
+def get_weed_detector(algorithm, model_path=None, platform='desktop'):
     from owl.detection import GreenOnGreen, GreenOnBrown
     if algorithm == 'gog':
-        print('here')
         return GreenOnGreen(model_path=model_path, platform=platform)
 
     else:

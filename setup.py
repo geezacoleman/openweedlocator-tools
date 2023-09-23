@@ -13,6 +13,12 @@ def get_version():
         return re.search(r'^__version__ = [\'"]([^\'"]*)[\'"]', f.read(), re.M).group(1)
 
 
+CLASSIFIERS = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
 setup(
     name='openweedlocator-toolkit',
     version=get_version(),
@@ -24,6 +30,8 @@ setup(
     },
     author='Guy Coleman',
     author_email='hoot@openweedlocator.com',
+    classifiers=CLASSIFIERS,
+    license='MIT',
     maintainer_email="guy.coleman@sydney.edu.au",
     description='A toolkit for green-on-brown and green-on-green weed detection',
     long_description=open('README.md').read(),
