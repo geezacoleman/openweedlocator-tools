@@ -37,11 +37,10 @@ def webcam(
     cv2.destroyAllWindows()
 
 
-def images_and_video(media_path='media',
+def images_and_video(media_path='',
                      algorithm='exhsv',
                      model_path='models/yolov8n.pt',
                      CONFIG_NAME="CONFIG_DAY_SENSITIVITY_1", **kwargs):
-
     weed_detector = get_weed_detector(algorithm=algorithm, model_path=model_path)
 
     config = load_config(CONFIG_NAME)
