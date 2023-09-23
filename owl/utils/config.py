@@ -1,4 +1,4 @@
-{
+CONFIG_DAY_SENSITIVITY_1 = {
   "//comment_gog": "enter parameters related to green-on-green detection",
   "conf": 0.6,
   "iou": 0.7,
@@ -14,10 +14,10 @@
   "brightnessMin": 60,
   "brightnessMax": 190,
   "minArea": 10,
-  "invert_hue": false,
+  "invert_hue": False,
 
   "//comment_general": "parameters related to general OWL operation",
-  "show_display": true,
+  "show_display": False,
   "algorithm": "exhsv",
   "resolution": [416, 320]
 }

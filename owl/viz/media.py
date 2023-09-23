@@ -7,11 +7,11 @@ def webcam(
         src=0,
         algorithm="exhsv",
         model_path="owl/models/yolov8n.pt",
-        config_file="owl/config/day-sensitivity-1.json",
+        CONFIG_NAME="CONFIG_DAY_SENSITIVITY_1",
         platform="desktop", **kwargs):
     weed_detector = get_weed_detector(algorithm=algorithm, model_path=model_path, platform=platform)
 
-    config = load_config(config_file)
+    config = load_config(CONFIG_NAME)
     config.update(kwargs)
     config.update({"algorithm": f"{algorithm}"})
 
@@ -40,11 +40,11 @@ def webcam(
 def images_and_video(media_path='media',
                      algorithm='exhsv',
                      model_path='models/yolov8n.pt',
-                     config_file="owl/config/day-sensitivity-1.json", **kwargs):
+                     CONFIG_NAME="CONFIG_DAY_SENSITIVITY_1", **kwargs):
 
     weed_detector = get_weed_detector(algorithm=algorithm, model_path=model_path)
 
-    config = load_config(config_file)
+    config = load_config(CONFIG_NAME)
     config.update(kwargs)
     config.update({"algorithm": f"{algorithm}"})
     resolution = config.get('resolution')

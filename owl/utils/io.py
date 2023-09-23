@@ -1,5 +1,5 @@
-import json
-
+from owl.utils import config as CONFIG_FILES
+import warnings
 def get_weed_detector(algorithm, model_path=None, platform='desktop'):
     from owl.detection import GreenOnGreen, GreenOnBrown
     if algorithm == 'gog':
@@ -8,9 +8,13 @@ def get_weed_detector(algorithm, model_path=None, platform='desktop'):
     else:
         return GreenOnBrown()
 
-def load_config(config_file):
-    with open(config_file, 'r') as f:
-        config = json.load(f)
+def load_config(CONFIG_NAME):
+    try:
+        config = getattr(CONFIG_FILES, CONFIG_NAME)
+    except AttributeError:
+        warnings.warn("Invalid configuration name, defaulting to CONFIG_DAY_SENSITIVITY_1")
+        config = CONFIG_FILES.CONFIG_DAY_SENSITIVITY_1
+
     return config
 
 def setup_and_run_detector(weed_detector, frame, config):
