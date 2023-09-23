@@ -1,2 +1,0 @@
-# Requirements specific to Desktop systems
-ultralytics==8.0.180

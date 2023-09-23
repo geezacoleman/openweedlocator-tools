@@ -5,7 +5,7 @@ import cv2
 from imutils.video import FileVideoStream
 
 class FrameReader:
-    def __init__(self, path, resolution=(640, 480), loop_time=5):
+    def __init__(self, path, resolution=(640, 480), loop_time=0.5):
         '''
         FrameReader allows users to provide a directory of images, video or a single image to OWL for testing
         and visualisation purposes.
