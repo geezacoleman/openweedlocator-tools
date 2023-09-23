@@ -1,6 +1,8 @@
 # Official OpenWeedLocator Toolkit
 Simplifying the integration of weed detection into your platform.
 
+[![OWL-tools](https://github.com/geezacoleman/openweedlocator-tools/actions/workflows/owl-testing.yml/badge.svg)](https://github.com/geezacoleman/openweedlocator-tools/actions/workflows/owl-testing.yml)
+
 ## Overview
 The OpenWeedLocator (OWL) is an open-source weed detection device for low-cost, 
 DIY site-specific weed management. Here, we're making the software that supports 
