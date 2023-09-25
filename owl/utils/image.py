@@ -49,29 +49,36 @@ class FrameReader:
             raise FileNotFoundError(f'[ERROR] The provided path does not exist: {path}')
 
     def read(self):
-        if self.single_image:
-            return self.cam
+        try:
+            if self.single_image:
+                return self.cam
 
-        elif self.files:
-            if self.curr_image is None or (time.time() - self.loop_start_time) > self.loop_time:
-                try:
-                    image = next(self.files)
-                    self.curr_image = cv2.imread(os.path.join(self.path, image))
-                    self.curr_image = cv2.resize(self.curr_image, self.resolution, interpolation=cv2.INTER_AREA)
+            elif self.files:
+                if self.curr_image is None or (time.time() - self.loop_start_time) > self.loop_time:
+                    try:
+                        image = next(self.files)
+                        self.curr_image = cv2.imread(os.path.join(self.path, image))
+                        self.curr_image = cv2.resize(self.curr_image, self.resolution, interpolation=cv2.INTER_AREA)
 
-                    self.loop_start_time = time.time()
+                        self.loop_start_time = time.time()
 
-                except StopIteration:
-                    self.files = iter(os.listdir(self.path))  # restart from first image
-                    return self.read()
+                    except StopIteration:
+                        self.files = iter(os.listdir(self.path))  # restart from first image
+                        return self.read()
 
-            return self.curr_image
+                return self.curr_image
 
-        else:
-            frame = self.cam.read()
-            frame = cv2.resize(frame, self.resolution, interpolation=cv2.INTER_AREA)
+            else:
+                frame = self.cam.read()
+                if frame is None:
+                    return None
 
-            return frame
+                frame = cv2.resize(frame, self.resolution, interpolation=cv2.INTER_AREA)
+                return frame
+
+        except cv2.error:
+            return None
+
 
     def reset(self):
         if self.input_type == "directory":

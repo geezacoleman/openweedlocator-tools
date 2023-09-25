@@ -66,3 +66,4 @@ def setup_and_run_detector(weed_detector, frame, config):
             invert_hue=invert_hue
         )
 
+
