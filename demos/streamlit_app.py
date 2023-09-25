@@ -6,7 +6,6 @@ from io import BytesIO
 import requests
 import cv2
 import tempfile
-import imutils
 import numpy as np
 
 def get_file_type(file):
@@ -24,8 +23,10 @@ def main():
     st.sidebar.write("## Select Parameters")
     with col_main:
         st.title("Interactive owl-tools")
-        st.write("Test out the owl-tools package on your own images and videos. Simply select the algorithm, model and image files below.")
-        st.write("This WebApp is part of the OpenWeedLocator (OWL) project developed by Guy Coleman. "
+        st.write("Test out the owl-tools package on your own images and videos. Simply select the algorithm, model (if using"
+                 "Green-on-Green and image files below. Use the Configuration Panel to set algorithm parameters. Click"
+                 "'Update Config' to test out the new config.")
+        st.write("This WebApp is part of the OpenWeedLocator (OWL) project. "
                  "To build your own OWL device find the code, guide and 3D model files [here](https://github.com/geezacoleman/OpenWeedLocator).")
 
     # Select Algorithm
@@ -56,12 +57,15 @@ def main():
         elif uploaded_model is None and 'model_path' not in st.session_state:
             st.error('Please upload model.')
 
-    uploaded_files = st.sidebar.file_uploader("Upload Files", type=['mp4', 'avi', 'mov', 'jpg', 'JPG', 'png', 'jpeg'], accept_multiple_files=True)
+    with st.sidebar.form("File Upload", clear_on_submit=True):
+        uploaded_files = st.file_uploader("Select Files", accept_multiple_files=True, type=['mp4', 'avi', 'mov', 'jpg', 'JPG', 'png', 'jpeg'])
+        submitted = st.form_submit_button("Upload")
 
     st_frame = col_main.empty()
 
     if "logo" not in st.session_state:
-        response = requests.get('https://user-images.githubusercontent.com/51358498/152991504-005a1daa-2900-4f48-8bec-d163d6336ed2.png')
+        response = requests.get(
+            'https://user-images.githubusercontent.com/51358498/152991504-005a1daa-2900-4f48-8bec-d163d6336ed2.png')
         if response.status_code == 200:
             logo = Image.open(BytesIO(response.content))
             st.session_state['logo'] = logo
@@ -69,14 +73,22 @@ def main():
         if 'last_frame' not in st.session_state:
             st.session_state['last_frame'] = st.session_state.logo
 
+    if len(uploaded_files) == 0:
+        st.warning("Please upload media files.")
+        response = requests.get(
+            'https://user-images.githubusercontent.com/51358498/152991504-005a1daa-2900-4f48-8bec-d163d6336ed2.png')
+        if response.status_code == 200:
+            logo = Image.open(BytesIO(response.content))
+            st.session_state['logo'] = st.session_state['last_frame'] = logo
+
     st_frame.image(st.session_state.last_frame, width=500)
-    CONFIG_NAME = st.sidebar.selectbox("Select Config", ["CONFIG_DAY_SENSITIVITY_1"])
-    config = load_config(CONFIG_NAME)
 
     with col_config:
         st.write("## Configuration Panel")
         with st.form(key='config_form'):
             submitted = st.form_submit_button("Update Config")
+            CONFIG_NAME = st.selectbox("Select Config", ["CONFIG_DAY_SENSITIVITY_1"])
+            config = load_config(CONFIG_NAME)
 
             with st.expander("### Green on Green Config"):
                 conf = st.slider('Confidence', min_value=0.0, max_value=1.0, value=config.get('conf', 0.6))
@@ -109,7 +121,8 @@ def main():
                 }
                 config.update(updated_config)
 
-    if uploaded_files and 0 <= current_file_idx < len(uploaded_files):
+    st.session_state.current_file_idx = (len(uploaded_files) - 1) if current_file_idx >= len(uploaded_files) else current_file_idx
+    if uploaded_files and 0 <= current_file_idx:
         current_file_idx = st.session_state.get("current_file_idx", 0)
         file_type = get_file_type(uploaded_files[current_file_idx])
 
@@ -120,7 +133,7 @@ def main():
 
                 st.session_state.model_used = model_path
             except Exception:
-                st.error('Please upload model.')
+                st.error('Please upload model or change algorithm')
 
         else:
             if config.get('algorithm') != algorithm_dict[algorithm_key]:
@@ -129,7 +142,7 @@ def main():
                     st.session_state.weed_detector = weed_detector
 
                 except Exception:
-                    st.warning('Please upload model.')
+                    st.warning('Please upload model or change algorithm')
 
             else:
                 weed_detector = st.session_state.weed_detector
@@ -162,22 +175,26 @@ def main():
 
                 if frame is None:
                     break
-
-                _, _, _, image = setup_and_run_detector(weed_detector=weed_detector, frame=frame.copy(), config=config)
-                rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-                st_frame.image(rgb, caption='Processed Frame', use_column_width=False, width=500)
-                st.session_state.last_frame = rgb
+                try:
+                    _, _, _, image = setup_and_run_detector(weed_detector=weed_detector, frame=frame.copy(), config=config)
+                    rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+                    st_frame.image(rgb, caption='Processed Frame', use_column_width=False, width=500)
+                    st.session_state.last_frame = rgb
+                except Exception:
+                    st.error('Please upload model or change algorithm.')
 
         elif file_type == 'image':
             uploaded_file = uploaded_files[current_file_idx]
             uploaded_file.seek(0)
             file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
             image = cv2.imdecode(file_bytes, 1)
+            try:
+                _, _, _, image = setup_and_run_detector(weed_detector=weed_detector, frame=image.copy(), config=config)
+                rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
-            _, _, _, image = setup_and_run_detector(weed_detector=weed_detector, frame=image.copy(), config=config)
-            rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-
-            st_frame.image(rgb)
+                st_frame.image(rgb)
+            except Exception:
+                st.error('Please upload model or change algorithm.')
 
         else:
             print('File type not supported.')
