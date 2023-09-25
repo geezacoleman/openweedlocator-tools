@@ -22,18 +22,15 @@ To install the latest version of `openweedlocator-tools` simply run:
 ```
 pip install openweedlocator-tools[desktop]
 ```
-### Raspberry Pi
-```
-pip install openweedlocator-tools[rpi]
-```
 
 ## Quick Start
 ```
 from owl.viz import webcam, images_and_video
 # Run using your webcam
-webcam(algorithm='gog')
-
+webcam(algorithm='gog') # press escape to exit
+# or 
+images_and_video(media_path='path/to/your/media_files
 ```
 
-## Examples
-### 
+## Streamlit App
+Try it for yourself now with the online, Streamlit app!
