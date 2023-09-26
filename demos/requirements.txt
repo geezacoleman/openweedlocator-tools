@@ -1,0 +1,8 @@
+imutils
+numpy
+opencv-contrib-python
+opencv-python
+pandas
+python-dateutil
+ultralytics
+openweedlocator-tools
