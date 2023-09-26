@@ -121,7 +121,13 @@ def main():
                 }
                 config.update(updated_config)
 
-    st.session_state.current_file_idx = (len(uploaded_files) - 1) if current_file_idx >= len(uploaded_files) else current_file_idx
+    if current_file_idx >= len(uploaded_files) and current_file_idx != 0:
+        st.session_state.current_file_idx = (len(uploaded_files) - 1)
+    elif current_file_idx < 0:
+        st.session_state.current_file_idx = 0
+    else:
+        st.session_state.current_file_idx = current_file_idx
+
     if uploaded_files and 0 <= current_file_idx:
         current_file_idx = st.session_state.get("current_file_idx", 0)
         file_type = get_file_type(uploaded_files[current_file_idx])
