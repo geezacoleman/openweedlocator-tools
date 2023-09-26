@@ -1,8 +1,7 @@
 imutils
 numpy
-opencv-contrib-python
-opencv-python
+opencv-python-headless
+openweedlocator-tools
 pandas
 python-dateutil
 ultralytics
-openweedlocator-tools
