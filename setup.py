@@ -20,8 +20,8 @@ CLASSIFIERS = [
     "Operating System :: OS Independent",
 ]
 
-desktop_requires = ['ultralytics']
-rpi_requires = []
+desktop_requires = ['ultralytics', 'opencv-contrib-python>=4.0,<5.0', 'opencv-python>=4.0,<5.0']
+rpi_requires = ['opencv-contrib-python>=4.0,<5.0', 'opencv-python>=4.0,<5.0']
 
 with open(os.path.join(os.path.dirname(__file__), 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
