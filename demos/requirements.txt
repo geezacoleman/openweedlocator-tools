@@ -1,7 +1,4 @@
-imutils
-numpy
-opencv-python-headless
 openweedlocator-tools
-pandas
 python-dateutil
 ultralytics
+imutils
