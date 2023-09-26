@@ -26,8 +26,10 @@ pip install openweedlocator-tools[desktop]
 ## Quick Start
 ```
 from owl.viz import webcam, images_and_video
+
 # Run using your webcam
-webcam(algorithm='gog') # press escape to exit
+webcam(algorithm='gog', model_path='models/yolov8n.pt) # press escape to exit, add your own model path as required or clone this repository
+
 # or 
 images_and_video(media_path='path/to/your/media_files
 ```
