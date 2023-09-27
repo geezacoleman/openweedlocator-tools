@@ -30,7 +30,6 @@ pip install openweedlocator-tools[desktop]
 pip install openweedlocator-tools[rpi]
 ```
 
-Note, owl-tools will 
 ## Quick Start
 ```Python
 from owl.viz import webcam, images_and_video
@@ -39,14 +38,14 @@ from owl.viz import webcam, images_and_video
 webcam(algorithm='gog', model_path='models/yolov8n.pt) # press escape to exit, add your own model path as required or clone this repository
 
 # or 
-images_and_video(media_path='path/to/your/media_files
+images_and_video(media_path='path/to/your/media_files)
 ```
 
 ## Streamlit App
-Try it for yourself now with the online, Streamlit app!
+Try it for yourself now with the official Streamlit app!
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://owl-tools.streamlit.app/)
 
-## Example
+## Example Usage
 These examples shows the basic functionality of the detection classes, GreenOnBrown and GreenOnGreen to operate on a video.
 
 ```Python
