@@ -38,7 +38,7 @@ from owl.viz import webcam, images_and_video
 webcam(algorithm='gog', model_path='models/yolov8n.pt) # press escape to exit, add your own model path as required or clone this repository
 
 # or 
-images_and_video(media_path='path/to/your/media_files)
+images_and_video(media_path='path/to/your/media_files')
 ```
 
 ## Streamlit App
@@ -125,4 +125,21 @@ while True:
         break
 
 cv2.destroyAllWindows()
+```
+
+## Cite
+If you use this software in your research, please consider citing the original work:
+```
+@article{Coleman2022,
+author = {Coleman, Guy and Salter, William and Walsh, Michael},
+doi = {10.1038/s41598-021-03858-9},
+issn = {2045-2322},
+journal = {Scientific Reports},
+number = {1},
+pages = {170},
+title = {{OpenWeedLocator (OWL): an open-source, low-cost device for fallow weed detection}},
+url = {https://doi.org/10.1038/s41598-021-03858-9},
+volume = {12},
+year = {2022}
+}
 ```
