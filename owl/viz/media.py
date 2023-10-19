@@ -18,7 +18,7 @@ def webcam(
     reader = cv2.VideoCapture(src)
 
     if not reader.isOpened():
-        print("[ERROR] Could not open camera.")
+        print("[ERROR] Could not open video.")
         exit()
 
     while True:
